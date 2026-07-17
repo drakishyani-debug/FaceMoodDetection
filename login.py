@@ -3,7 +3,33 @@ import streamlit as st
 st.markdown("""
 <style>
 .stApp {
-    background-color:linear-gradient;
+    background: linear-gradient(135deg, #081A4B 0%, #0B2C8C 50%, #102D72 100%);
+    color: white;
+}
+
+/* Login form */
+div[data-testid="stForm"],
+div[data-testid="stVerticalBlock"] {
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+/* Labels */
+label {
+    color: white !important;
+}
+
+/* Button */
+.stButton > button {
+    background-color: #2196F3;
+    color: white;
+    border-radius: 8px;
+    border: none;
+}
+
+.stButton > button:hover {
+    background-color: #1976D2;
 }
 </style>
 """, unsafe_allow_html=True)
