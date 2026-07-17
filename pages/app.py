@@ -452,15 +452,15 @@ if "webcam_error" not in st.session_state:
 
 # ==================== PROFILE ====================
 
-st.sidebar.image(
-    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-    width=100
-)
+st.sidebar.title("👤 My Profile")
 
-st.sidebar.markdown("### 👤 User")
-st.sidebar.write(st.session_state.get("email", "Guest"))
+if st.session_state.get("profile_pic") is not None:
+    st.sidebar.image(st.session_state["profile_pic"], width=100)
 
-st.sidebar.markdown("---")
+st.sidebar.write("**Name:**", st.session_state.get("name", "User"))
+st.sidebar.write("**Email:**", st.session_state.get("email", ""))
+st.sidebar.write("**Age:**", st.session_state.get("age", ""))
+st.sidebar.write("**Gender:**", st.session_state.get("gender", ""))
 
 # ==================== MAIN UI ====================
 st.markdown('<h1 class="main-title">🎭 FACE MOOD DETECTION</h1>', unsafe_allow_html=True)
