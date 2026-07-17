@@ -64,14 +64,14 @@ label{
 /* ===== Text Input ===== */
 .stTextInput input{
     background:rgba(255,255,255,0.08) !important;
-    color:white !important;
+    color:black !important;
     border:1px solid rgba(0,212,255,0.4) !important;
     border-radius:10px !important;
 }
 
 /* Password Input */
 .stTextInput input::placeholder{
-    color:#cccccc !important;
+    color:black !important;
 }
 
 /* ===== Selectbox ===== */
