@@ -10,6 +10,28 @@ from PIL import Image
 import os
 from pathlib import Path
 import time
+import pyrebase
+
+firebaseConfig = {
+    "apiKey":"AIzaSyBArammCIVUuo1xhF5H1RzeiN7IAWHZsdQ",
+    "authDomain": "facemooddetection.firebaseapp.com",
+    "databaseURL": "https://facemooddetection-default-rtdb.firebaseio.com/",
+    "projectId": "facemooddetection",
+    "storageBucket": "facemooddetection.firebasestorage.app",
+    "messagingSenderId": "153465858963",
+    "appId": "1:153465858963:web:116408eedfcc72fd66d666"
+}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+db = firebase.database()
+
+# Get logged-in user's email
+email = st.session_state.get("email")
+
+user = None
+
+if email:
+    user = db.child("Users").child(email.replace(".", "_")).get().val()
 
 # ==================== CONFIGURATION & SETUP ====================
 BASE_DIR = Path(__file__).resolve().parent
@@ -449,18 +471,19 @@ if "last_frame_rgb" not in st.session_state:
     st.session_state.last_frame_rgb = None
 if "webcam_error" not in st.session_state:
     st.session_state.webcam_error = None
-
+       
 # ==================== PROFILE ====================
 
 st.sidebar.title("👤 My Profile")
 
-if st.session_state.get("profile_pic") is not None:
-    st.sidebar.image(st.session_state["profile_pic"], width=100)
-
-st.sidebar.write("**Name:**", st.session_state.get("name", "User"))
-st.sidebar.write("**Email:**", st.session_state.get("email", ""))
-st.sidebar.write("**Age:**", st.session_state.get("age", ""))
-st.sidebar.write("**Gender:**", st.session_state.get("gender", ""))
+if user:
+    st.sidebar.write(f"**Name:** {user['name']}")
+    st.sidebar.write(f"**Email:** {user['email']}")
+    st.sidebar.write(f"**Phone:** {user['phone']}")
+    st.sidebar.write(f"**Age:** {user['age']}")
+    st.sidebar.write(f"**Gender:** {user['gender']}")
+else:
+    st.sidebar.warning("Profile not found")
 
 # ==================== MAIN UI ====================
 st.markdown('<h1 class="main-title">🎭 FACE MOOD DETECTION</h1>', unsafe_allow_html=True)
