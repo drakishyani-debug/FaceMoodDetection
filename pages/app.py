@@ -449,6 +449,19 @@ if "last_frame_rgb" not in st.session_state:
     st.session_state.last_frame_rgb = None
 if "webcam_error" not in st.session_state:
     st.session_state.webcam_error = None
+
+# ==================== PROFILE ====================
+
+st.sidebar.image(
+    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+    width=100
+)
+
+st.sidebar.markdown("### 👤 User")
+st.sidebar.write(st.session_state.get("email", "Guest"))
+
+st.sidebar.markdown("---")
+
 # ==================== MAIN UI ====================
 st.markdown('<h1 class="main-title">🎭 FACE MOOD DETECTION</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Real-time Emotion Recognition with AI</p>', unsafe_allow_html=True)
