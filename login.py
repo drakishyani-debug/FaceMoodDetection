@@ -150,6 +150,7 @@ if choice == "Login":
         try:
             auth.sign_in_with_email_and_password(email, password)
             st.session_state["logged_in"] = True
+            st.session_state["email"] = email
             st.switch_page("pages/app.py")
         except Exception as e:
             import json
