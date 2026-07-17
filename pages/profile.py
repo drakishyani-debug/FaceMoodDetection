@@ -1,5 +1,20 @@
 import streamlit as st
+import pyrebase
 
+firebaseConfig = {
+    "apiKey":"AIzaSyBArammCIVUuo1xhF5H1RzeiN7IAWHZsdQ",
+    "authDomain": "facemooddetection.firebaseapp.com",
+    "databaseURL": "https://facemooddetection-default-rtdb.firebaseio.com/",
+    "projectId": "facemooddetection",
+    "storageBucket": "facemooddetection.firebasestorage.app",
+    "messagingSenderId": "153465858963",
+    "appId": "1:153465858963:web:116408eedfcc72fd66d666"
+}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+db = firebase.database()
+
+# ---------------- Page ----------------
 st.set_page_config(page_title="Create Profile", page_icon="👤")
 
 st.title("👤 Create Your Profile")
@@ -15,11 +30,26 @@ profile_pic = st.file_uploader(
 )
 
 if st.button("Save Profile"):
+
+    # Save in session state
     st.session_state["name"] = name
     st.session_state["phone"] = phone
     st.session_state["age"] = age
     st.session_state["gender"] = gender
     st.session_state["profile_pic"] = profile_pic
+
+    # Save in Firebase Database
+    data = {
+        "name": name,
+        "phone": phone,
+        "age": age,
+        "gender": gender,
+        "email": st.session_state.get("email", "")
+    }
+
+    db.child("Users").child(
+        st.session_state.get("email", "").replace(".", "_")
+    ).set(data)
 
     st.success("✅ Profile Created Successfully!")
 
