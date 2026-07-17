@@ -1,4 +1,12 @@
 import streamlit as st
+
+st.markdown("""
+<style>
+.stApp {
+    background-color:Indigo;
+}
+</style>
+""", unsafe_allow_html=True)
 import pyrebase
 
 firebaseConfig = {
