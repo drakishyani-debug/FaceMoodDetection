@@ -124,6 +124,7 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
+db = firebase.database()
 
 # ---------------- LOGIN PAGE ----------------
 
@@ -148,19 +149,32 @@ if choice == "Sign Up":
 if choice == "Login":
     if st.button("Login"):
         try:
+            # Login user
             auth.sign_in_with_email_and_password(email, password)
+
+            # Save login session
             st.session_state["logged_in"] = True
             st.session_state["email"] = email
 
-            user = db.child("Users").child(email.replace(".", "_")).get().val()
+            # Check if profile exists
+            user = db.child("Users").child(
+                email.replace(".", "_")
+            ).get().val()
 
             if user:
+                # Load profile into session
+                st.session_state["name"] = user.get("name", "")
+                st.session_state["phone"] = user.get("phone", "")
+                st.session_state["age"] = user.get("age", "")
+                st.session_state["gender"] = user.get("gender", "")
+
                 st.switch_page("pages/app.py")
             else:
                 st.switch_page("pages/profile.py")
-            except Exception as e:
-            import json
-            st.error(e)
+
+        except Exception as e:
+            st.error("❌ Invalid Email or Password")
+
             
 # Stop here if not logged in
 if not st.session_state.get("logged_in"):
