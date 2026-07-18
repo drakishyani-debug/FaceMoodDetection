@@ -151,8 +151,14 @@ if choice == "Login":
             auth.sign_in_with_email_and_password(email, password)
             st.session_state["logged_in"] = True
             st.session_state["email"] = email
-            st.switch_page("pages/profile.py")
-        except Exception as e:
+
+            user = db.child("Users").child(email.replace(".", "_")).get().val()
+
+            if user:
+                st.switch_page("pages/app.py")
+            else:
+                st.switch_page("pages/profile.py")
+            except Exception as e:
             import json
             st.error(e)
             
