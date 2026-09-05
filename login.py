@@ -173,7 +173,7 @@ if choice == "Login":
                 st.switch_page("pages/profile.py")
 
         except Exception as e:
-            st.error("❌ Invalid Email or Password")
+            st.error(f"❌ Login Error: {e}")
 
             
 # Stop here if not logged in
