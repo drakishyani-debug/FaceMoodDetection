@@ -149,20 +149,25 @@ if choice == "Sign Up":
 if choice == "Login":
     if st.button("Login"):
         try:
-            # Login user
-            auth.sign_in_with_email_and_password(email, password)
+            # Authenticate user
+            user_auth = auth.sign_in_with_email_and_password(
+                email,
+                password
+            )
 
             # Save login session
             st.session_state["logged_in"] = True
             st.session_state["email"] = email
 
+            # Get Firebase authentication token
+            id_token = user_auth["idToken"]
+
             # Check if profile exists
             user = db.child("Users").child(
                 email.replace(".", "_")
-            ).get().val()
+            ).get(id_token).val()
 
             if user:
-                # Load profile into session
                 st.session_state["name"] = user.get("name", "")
                 st.session_state["phone"] = user.get("phone", "")
                 st.session_state["age"] = user.get("age", "")
