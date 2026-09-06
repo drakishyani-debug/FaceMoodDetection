@@ -141,11 +141,30 @@ password = st.text_input("Password", type="password")
 if choice == "Sign Up":
     if st.button("Create Account"):
         try:
-            auth.create_user_with_email_and_password(email, password)
-            st.success("✅ Account created successfully!")
-        except Exception as e:
-            st.error(f"Error: {e}")
+            user_auth = auth.create_user_with_email_and_password(
+                email,
+                password
+            )
 
+            uid = user_auth["localId"]
+            id_token = user_auth["idToken"]
+
+            db.child("Users").child(uid).set(
+                {
+                    "email": email,
+                    "name": "",
+                    "phone": "",
+                    "age": "",
+                    "gender": ""
+                },
+                token=id_token
+            )
+
+            st.success("✅ Account created successfully!")
+
+        except Exception as e:
+            st.error(f"❌ Signup Error: {e}")
+            
 if choice == "Login":
     if st.button("Login"):
         try:
@@ -166,7 +185,7 @@ if choice == "Login":
             st.session_state["id_token"] = id_token
 
             # Check if profile exists using UID
-            user = db.child("Users").child(uid).get(id_token).val()
+            user = db.child("Users").child(uid).get(token=id_token).val()
 
             if user:
                 st.session_state["name"] = user.get("name", "")
