@@ -306,6 +306,35 @@ st.markdown("""
         border: 1px solid rgba(0, 255, 0, 0.3) !important;
         border-radius: 10px !important;
     }
+    /* ===== INPUT SOURCE TEXT COLORS ===== */
+
+    /* Choose how to provide a face image */
+    [data-testid="stRadio"] > label p {
+      color: #00d4ff !important;
+      font-weight: 600 !important;
+    }
+
+    /* Browser Camera, Upload Image, Local Webcam */
+    [data-testid="stRadio"] div[role="radiogroup"] label p {
+      color: white !important;
+      font-weight: 500 !important;
+    }
+
+    /* Upload a face photo */
+    [data-testid="stFileUploader"] label p {
+      color: #00d4ff !important;
+      font-weight: 600 !important;
+    }
+
+    /* Upload button */
+    [data-testid="stFileUploader"] button {
+      color: white !important;
+    }
+
+    /* 200MB per file - JPG, JPEG, PNG */
+    [data-testid="stFileUploader"] small {
+      color: #c0c0ff !important;
+    }
     /* ===== Music & Movie Recommendation Text ===== */
 
     .recommendation-text {
