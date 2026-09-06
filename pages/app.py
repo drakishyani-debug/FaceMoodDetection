@@ -444,25 +444,54 @@ def load_image_from_bytes(uploaded_file):
         return None
 
 def process_frame(frame):
-    """Detect face, predict emotion, and return a display-ready RGB frame."""
+    """Detect only one person, predict emotion, and return display-ready RGB frame."""
+
     faces = detect_faces(frame, st.session_state.cascade)
+
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    best_face = None
-    best_area = 0
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 212, 255), 3)
-        area = w * h
-        if area > best_area:
-            best_area = area
-            best_face = (x, y, w, h)
-    if best_face is not None:
-        x, y, w, h = best_face
-        face_roi = frame[y:y + h, x:x + w]
-        emotion_idx, confidences = predict_emotion(st.session_state.model, face_roi)
-        if emotion_idx is not None and confidences is not None:
-            st.session_state.last_emotion = emotion_idx
-            st.session_state.last_confidence = confidences
-            st.session_state.frame_count += 1
+
+    # No face detected
+    if len(faces) == 0:
+        return frame_rgb
+
+    # =========================================================
+    # SELECT ONLY ONE FACE
+    # The largest detected face is considered the main person.
+    # =========================================================
+    best_face = max(
+        faces,
+        key=lambda face: face[2] * face[3]
+    )
+
+    x, y, w, h = best_face
+
+    # Draw rectangle ONLY around the selected person
+    cv2.rectangle(
+        frame_rgb,
+        (x, y),
+        (x + w, y + h),
+        (0, 212, 255),
+        3
+    )
+
+    # =========================================================
+    # EXTRACT ONLY THE SELECTED PERSON'S FACE
+    # =========================================================
+    face_roi = frame[y:y + h, x:x + w]
+
+    # =========================================================
+    # PREDICT EMOTION ONLY FOR THIS PERSON
+    # =========================================================
+    emotion_idx, confidences = predict_emotion(
+        st.session_state.model,
+        face_roi
+    )
+
+    if emotion_idx is not None and confidences is not None:
+        st.session_state.last_emotion = emotion_idx
+        st.session_state.last_confidence = confidences
+        st.session_state.frame_count += 1
+
     return frame_rgb
 
 # ==================== INITIALIZE SESSION STATE ====================
