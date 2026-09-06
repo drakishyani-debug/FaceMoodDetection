@@ -334,7 +334,7 @@ st.markdown("""
 
     /* Upload button */
     [data-testid="stFileUploader"] button {
-      color: black !important;
+      color: white !important;
     }
 
     /* 200MB per file - JPG, JPEG, PNG */
