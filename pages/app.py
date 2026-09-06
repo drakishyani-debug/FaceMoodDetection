@@ -408,6 +408,56 @@ def get_emotion_data(emotion_idx):
         6: "Wow! You look pleasantly surprised! What's the good news? 🎉"
     }
     return emotions.get(emotion_idx, emotions[4]), ai_responses.get(emotion_idx, "")
+       def process_frame(frame):
+    """Detect only one person, predict emotion, and return display-ready RGB frame."""
+
+    faces = detect_faces(frame, st.session_state.cascade)
+
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    # No face detected
+    if len(faces) == 0:
+        return frame_rgb
+
+    # =========================================================
+    # SELECT ONLY ONE FACE
+    # The largest detected face is considered the main person.
+    # =========================================================
+    best_face = max(
+        faces,
+        key=lambda face: face[2] * face[3]
+    )
+
+    x, y, w, h = best_face
+
+    # Draw rectangle ONLY around the selected person
+    cv2.rectangle(
+        frame_rgb,
+        (x, y),
+        (x + w, y + h),
+        (0, 212, 255),
+        3
+    )
+
+    # =========================================================
+    # EXTRACT ONLY THE SELECTED PERSON'S FACE
+    # =========================================================
+    face_roi = frame[y:y + h, x:x + w]
+
+    # =========================================================
+    # PREDICT EMOTION ONLY FOR THIS PERSON
+    # =========================================================
+    emotion_idx, confidences = predict_emotion(
+        st.session_state.model,
+        face_roi
+    )
+
+    if emotion_idx is not None and confidences is not None:
+        st.session_state.last_emotion = emotion_idx
+        st.session_state.last_confidence = confidences
+        st.session_state.frame_count += 1
+
+    return frame_rgb
 
 def capture_webcam_frame():
     """Capture a single frame from the default webcam with Windows-friendly fallbacks."""
@@ -653,6 +703,56 @@ with col_right:
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("👌 Detected emotions will appear here with personalized AI insights!")
+    st.markdown('</div>', unsafe_allow_html=True)
+# ==================== MUSIC & MOVIE RECOMMENDATIONS ====================
+
+if st.session_state.last_emotion is not None:
+
+    recommendations = get_recommendations(
+        st.session_state.last_emotion
+    )
+
+    emotion_data, _ = get_emotion_data(
+        st.session_state.last_emotion
+    )
+
+    st.markdown(
+        '<div class="glass-card">',
+        unsafe_allow_html=True
+    )
+
+    st.subheader("🎵 Music & 🎬 Movie Suggestions")
+
+    st.markdown(
+        f"**Based on detected mood:** "
+        f"{emotion_data['emoji']} {emotion_data['label']}"
+    )
+
+    music_col, movie_col = st.columns(2)
+
+    # ================= MUSIC =================
+    with music_col:
+
+        st.markdown("### 🎵 Music")
+
+        for song in recommendations["music"]:
+            st.markdown(f"🎧 **{song}**")
+
+    # ================= MOVIES =================
+    with movie_col:
+
+        st.markdown("### 🎬 Movies")
+
+        for movie in recommendations["movies"]:
+            st.markdown(f"🍿 **{movie}**")
+
+    st.markdown(
+        '<p style="color:#a0a0ff; font-size:0.85rem; margin-top:1rem;">'
+        '💡 Suggestions are based on the detected facial expression.'
+        '</p>',
+        unsafe_allow_html=True
+    )
+
     st.markdown('</div>', unsafe_allow_html=True)
 # ==================== FOOTER ====================
 st.markdown("---")
