@@ -795,9 +795,9 @@ if st.session_state.last_emotion is not None:
         st.markdown("### 🎵 Music")
 
         for song in recommendations["music"]:
-    st.markdown(
-        f'<div class="recommendation-text">🎧 {song}</div>',
-        unsafe_allow_html=True
+            st.markdown(
+                f'<div class="recommendation-text">🎧 {song}</div>',
+                unsafe_allow_html=True
     )
 
     # ================= MOVIES =================
@@ -806,9 +806,9 @@ if st.session_state.last_emotion is not None:
         st.markdown("### 🎬 Movies")
 
         for movie in recommendations["movies"]:
-    st.markdown(
-        f'<div class="recommendation-text">🍿 {movie}</div>',
-        unsafe_allow_html=True
+            st.markdown(
+                f'<div class="recommendation-text">🍿 {movie}</div>',
+                unsafe_allow_html=True
     )
 
     st.markdown(
