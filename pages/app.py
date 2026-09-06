@@ -352,6 +352,13 @@ st.markdown("""
     .recommendation-title {
         color: white !important;
     }
+    /* ===== MY PROFILE TITLE ===== */
+
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {
+        color: #00d4ff !important;
+}
 </style>
 """, unsafe_allow_html=True)
 # ==================== HELPER FUNCTIONS ====================
