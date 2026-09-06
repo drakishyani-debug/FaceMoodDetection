@@ -25,13 +25,22 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 
-# Get logged-in user's email
-email = st.session_state.get("email")
+# Get logged-in user's Firebase UID and ID token
+uid = st.session_state.get("uid")
+id_token = st.session_state.get("id_token")
 
 user = None
 
-if email:
-    user = db.child("Users").child(email.replace(".", "_")).get().val()
+if uid and id_token:
+    try:
+        user = db.child("Users").child(uid).get(
+            token=id_token
+        ).val()
+    except Exception as e:
+        st.error(f"❌ Unable to load profile: {e}")
+else:
+    st.warning("⚠️ Login session expired. Please login again.")
+    st.stop()
 
 # ==================== CONFIGURATION & SETUP ====================
 BASE_DIR = Path(__file__).resolve().parent
