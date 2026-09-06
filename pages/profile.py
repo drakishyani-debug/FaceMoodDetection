@@ -15,14 +15,20 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 
 # ---------------- Page ----------------
-st.set_page_config(page_title="Create Profile", page_icon="👤")
+st.set_page_config(
+    page_title="Create Profile",
+    page_icon="👤"
+)
 
 st.title("👤 Create Your Profile")
 
 name = st.text_input("Full Name")
 phone = st.text_input("Phone Number")
 age = st.number_input("Age", 1, 100)
-gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+gender = st.selectbox(
+    "Gender",
+    ["Male", "Female", "Other"]
+)
 
 profile_pic = st.file_uploader(
     "Upload Profile Picture",
@@ -31,6 +37,14 @@ profile_pic = st.file_uploader(
 
 if st.button("Save Profile"):
 
+    # Check login information
+    uid = st.session_state.get("uid")
+    id_token = st.session_state.get("id_token")
+
+    if not uid or not id_token:
+        st.error("❌ User is not logged in. Please login again.")
+        st.stop()
+
     # Save in session state
     st.session_state["name"] = name
     st.session_state["phone"] = phone
@@ -38,7 +52,7 @@ if st.button("Save Profile"):
     st.session_state["gender"] = gender
     st.session_state["profile_pic"] = profile_pic
 
-    # Save in Firebase Database
+    # Profile data
     data = {
         "name": name,
         "phone": phone,
@@ -47,9 +61,11 @@ if st.button("Save Profile"):
         "email": st.session_state.get("email", "")
     }
 
-    db.child("Users").child(
-        st.session_state.get("email", "").replace(".", "_")
-    ).set(data)
+    # Save profile using Firebase UID
+    db.child("Users").child(uid).set(
+        data,
+        id_token
+    )
 
     st.success("✅ Profile Created Successfully!")
 
