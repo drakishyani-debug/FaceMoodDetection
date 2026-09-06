@@ -155,17 +155,18 @@ if choice == "Login":
                 password
             )
 
+            # Get Firebase UID and ID token
+            uid = user_auth["localId"]
+            id_token = user_auth["idToken"]
+
             # Save login session
             st.session_state["logged_in"] = True
             st.session_state["email"] = email
+            st.session_state["uid"] = uid
+            st.session_state["id_token"] = id_token
 
-            # Get Firebase authentication token
-            id_token = user_auth["idToken"]
-
-            # Check if profile exists
-            user = db.child("Users").child(
-                email.replace(".", "_")
-            ).get(id_token).val()
+            # Check if profile exists using UID
+            user = db.child("Users").child(uid).get(id_token).val()
 
             if user:
                 st.session_state["name"] = user.get("name", "")
