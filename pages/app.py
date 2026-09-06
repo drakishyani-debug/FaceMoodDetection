@@ -306,6 +306,17 @@ st.markdown("""
         border: 1px solid rgba(0, 255, 0, 0.3) !important;
         border-radius: 10px !important;
     }
+    /* ===== Music & Movie Recommendation Text ===== */
+
+    .recommendation-text {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+
+    .recommendation-title {
+        color: white !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 # ==================== HELPER FUNCTIONS ====================
@@ -784,7 +795,10 @@ if st.session_state.last_emotion is not None:
         st.markdown("### 🎵 Music")
 
         for song in recommendations["music"]:
-            st.markdown(f"🎧 **{song}**")
+    st.markdown(
+        f'<div class="recommendation-text">🎧 {song}</div>',
+        unsafe_allow_html=True
+    )
 
     # ================= MOVIES =================
     with movie_col:
@@ -792,7 +806,10 @@ if st.session_state.last_emotion is not None:
         st.markdown("### 🎬 Movies")
 
         for movie in recommendations["movies"]:
-            st.markdown(f"🍿 **{movie}**")
+    st.markdown(
+        f'<div class="recommendation-text">🍿 {movie}</div>',
+        unsafe_allow_html=True
+    )
 
     st.markdown(
         '<p style="color:#a0a0ff; font-size:0.85rem; margin-top:1rem;">'
