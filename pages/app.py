@@ -306,6 +306,12 @@ st.markdown("""
         border: 1px solid rgba(0, 255, 0, 0.3) !important;
         border-radius: 10px !important;
     }
+    /* ===== TAKE A SELFIE TEXT COLOR ===== */
+
+    [data-testid="stCameraInput"] label p {
+        color: #00d4ff !important;
+        font-weight: 600 !important;
+    }
     /* ===== INPUT SOURCE TEXT COLORS ===== */
 
     /* Choose how to provide a face image */
