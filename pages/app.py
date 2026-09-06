@@ -352,13 +352,32 @@ st.markdown("""
     .recommendation-title {
         color: white !important;
     }
+    /* ===== SIDEBAR WHITE BACKGROUND ===== */
+
+    [data-testid="stSidebar"] {
+        background: white !important;
+    }
+
     /* ===== MY PROFILE TITLE ===== */
 
     [data-testid="stSidebar"] h1,
     [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3 {
-        color: black !important;
-}
+        color: #A855F7 !important;
+    }
+
+    /* ===== PROFILE TEXT ===== */
+
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] strong {
+        color: #222222 !important;
+    }
+
+    /* ===== LOGOUT BUTTON ===== */
+
+    [data-testid="stSidebar"] button {
+        color: #222222 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 # ==================== HELPER FUNCTIONS ====================
