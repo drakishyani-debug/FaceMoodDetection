@@ -333,7 +333,7 @@ st.markdown("""
 
     /* 200MB per file - JPG, JPEG, PNG */
     [data-testid="stFileUploader"] small {
-      color: #c0c0ff !important;
+      color: black !important;
     }
     /* ===== Music & Movie Recommendation Text ===== */
 
