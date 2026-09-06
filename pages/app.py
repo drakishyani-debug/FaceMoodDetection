@@ -408,7 +408,106 @@ def get_emotion_data(emotion_idx):
         6: "Wow! You look pleasantly surprised! What's the good news? 🎉"
     }
     return emotions.get(emotion_idx, emotions[4]), ai_responses.get(emotion_idx, "")
-       def process_frame(frame):
+
+def get_recommendations(emotion_idx):
+    """Return music and movie recommendations based on detected emotion."""
+
+    recommendations = {
+        0: {  # Angry
+            "music": [
+                "Weightless – Marconi Union",
+                "Let Her Go – Passenger",
+                "Someone Like You – Adele"
+            ],
+            "movies": [
+                "3 Idiots",
+                "The Pursuit of Happyness",
+                "The Intern"
+            ]
+        },
+
+        1: {  # Disgust
+            "music": [
+                "Happy – Pharrell Williams",
+                "Count on Me – Bruno Mars",
+                "Best Day of My Life – American Authors"
+            ],
+            "movies": [
+                "The Intern",
+                "Paddington",
+                "Zindagi Na Milegi Dobara"
+            ]
+        },
+
+        2: {  # Fear
+            "music": [
+                "Perfect – Ed Sheeran",
+                "A Thousand Years – Christina Perri",
+                "Photograph – Ed Sheeran"
+            ],
+            "movies": [
+                "3 Idiots",
+                "Forrest Gump",
+                "The Intern"
+            ]
+        },
+
+        3: {  # Happy
+            "music": [
+                "Happy – Pharrell Williams",
+                "On Top of the World – Imagine Dragons",
+                "Uptown Funk – Mark Ronson ft. Bruno Mars"
+            ],
+            "movies": [
+                "3 Idiots",
+                "Zindagi Na Milegi Dobara",
+                "The Greatest Showman"
+            ]
+        },
+
+        4: {  # Neutral
+            "music": [
+                "Until I Found You – Stephen Sanchez",
+                "Perfect – Ed Sheeran",
+                "Lovely – Billie Eilish"
+            ],
+            "movies": [
+                "Interstellar",
+                "The Martian",
+                "The Secret Life of Walter Mitty"
+            ]
+        },
+
+        5: {  # Sad
+            "music": [
+                "Fix You – Coldplay",
+                "Let Her Go – Passenger",
+                "Photograph – Ed Sheeran"
+            ],
+            "movies": [
+                "The Pursuit of Happyness",
+                "Forrest Gump",
+                "Good Will Hunting"
+            ]
+        },
+
+        6: {  # Surprise
+            "music": [
+                "Can't Stop the Feeling! – Justin Timberlake",
+                "On Top of the World – Imagine Dragons",
+                "Uptown Funk – Mark Ronson ft. Bruno Mars"
+            ],
+            "movies": [
+                "Jumanji: Welcome to the Jungle",
+                "Free Guy",
+                "The Greatest Showman"
+            ]
+        }
+    }
+
+    return recommendations.get(emotion_idx, recommendations[4])
+       
+def process_frame(frame):
     """Detect only one person, predict emotion, and return display-ready RGB frame."""
 
     faces = detect_faces(frame, st.session_state.cascade)
@@ -492,57 +591,6 @@ def load_image_from_bytes(uploaded_file):
     except Exception as e:
         print(f"[DEBUG] Image loading error: {e}")
         return None
-
-def process_frame(frame):
-    """Detect only one person, predict emotion, and return display-ready RGB frame."""
-
-    faces = detect_faces(frame, st.session_state.cascade)
-
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
-    # No face detected
-    if len(faces) == 0:
-        return frame_rgb
-
-    # =========================================================
-    # SELECT ONLY ONE FACE
-    # The largest detected face is considered the main person.
-    # =========================================================
-    best_face = max(
-        faces,
-        key=lambda face: face[2] * face[3]
-    )
-
-    x, y, w, h = best_face
-
-    # Draw rectangle ONLY around the selected person
-    cv2.rectangle(
-        frame_rgb,
-        (x, y),
-        (x + w, y + h),
-        (0, 212, 255),
-        3
-    )
-
-    # =========================================================
-    # EXTRACT ONLY THE SELECTED PERSON'S FACE
-    # =========================================================
-    face_roi = frame[y:y + h, x:x + w]
-
-    # =========================================================
-    # PREDICT EMOTION ONLY FOR THIS PERSON
-    # =========================================================
-    emotion_idx, confidences = predict_emotion(
-        st.session_state.model,
-        face_roi
-    )
-
-    if emotion_idx is not None and confidences is not None:
-        st.session_state.last_emotion = emotion_idx
-        st.session_state.last_confidence = confidences
-        st.session_state.frame_count += 1
-
-    return frame_rgb
 
 # ==================== INITIALIZE SESSION STATE ====================
 if "model" not in st.session_state:
