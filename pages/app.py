@@ -357,7 +357,7 @@ st.markdown("""
     [data-testid="stSidebar"] h1,
     [data-testid="stSidebar"] h2,
     [data-testid="stSidebar"] h3 {
-        color: #00d4ff !important;
+        color: black !important;
 }
 </style>
 """, unsafe_allow_html=True)
