@@ -187,11 +187,13 @@ if choice == "Login":
             # Check if profile exists using UID
             user = db.child("Users").child(uid).get(token=id_token).val()
 
-            if user:
+            if user and user.get("name"):
                 st.session_state["name"] = user.get("name", "")
                 st.session_state["phone"] = user.get("phone", "")
                 st.session_state["age"] = user.get("age", "")
                 st.session_state["gender"] = user.get("gender", "")
+                st.switch_page("pages/app.py")
+            else:
                 st.switch_page("pages/profile.py")
 
         except Exception as e:
