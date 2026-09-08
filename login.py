@@ -192,9 +192,6 @@ if choice == "Login":
                 st.session_state["phone"] = user.get("phone", "")
                 st.session_state["age"] = user.get("age", "")
                 st.session_state["gender"] = user.get("gender", "")
-
-                st.switch_page("pages/app.py")
-            else:
                 st.switch_page("pages/profile.py")
 
         except Exception as e:
