@@ -622,9 +622,9 @@ def process_frame(frame):
         st.session_state.model,
         face_roi
     )
-       if confidences is not None:
-    st.write("Number of predictions:", len(confidences))
-    st.write("Prediction values:", confidences)
+    if confidences is not None:
+        st.write("Number of predictions:", len(confidences))
+        st.write("Prediction values:", confidences)
 
     if emotion_idx is not None and confidences is not None:
         st.session_state.last_emotion = emotion_idx
