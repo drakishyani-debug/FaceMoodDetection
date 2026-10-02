@@ -467,8 +467,7 @@ def get_emotion_data(emotion_idx):
         2: {"label": "Fear", "emoji": "😨", "color": "#9944ff"},
         3: {"label": "Happy", "emoji": "😄", "color": "#44ff44"},
         4: {"label": "Neutral", "emoji": "😐", "color": "#88ccff"},
-        5: {"label": "Sad", "emoji": "😢", "color": "#4488ff"},
-        6: {"label": "Surprise", "emoji": "😮", "color": "#ffcc44"}
+        5: {"label": "Sad", "emoji": "😢", "color": "#4488ff"}
     }
     ai_responses = {
         0: "I sense some frustration or anger. Take a deep breath. What's bothering you? I'm here to listen.",
@@ -476,8 +475,7 @@ def get_emotion_data(emotion_idx):
         2: "I notice fear or anxiety. Remember, you're stronger than you think. What can I help with?",
         3: "Beautiful! Your happiness is contagious. Keep shining! 🌟",
         4: "You seem calm and collected. A peaceful mind is a powerful mind.",
-        5: "I sense sadness. It's okay to feel down sometimes. Would you like to talk about it?",
-        6: "Wow! You look pleasantly surprised! What's the good news? 🎉"
+        5: "I sense sadness. It's okay to feel down sometimes. Would you like to talk about it?"
     }
     return emotions.get(emotion_idx, emotions[4]), ai_responses.get(emotion_idx, "")
 
@@ -560,19 +558,6 @@ def get_recommendations(emotion_idx):
                 "The Pursuit of Happyness",
                 "Forrest Gump",
                 "Good Will Hunting"
-            ]
-        },
-
-        6: {  # Surprise
-            "music": [
-                "Can't Stop the Feeling! – Justin Timberlake",
-                "On Top of the World – Imagine Dragons",
-                "Uptown Funk – Mark Ronson ft. Bruno Mars"
-            ],
-            "movies": [
-                "Jumanji: Welcome to the Jungle",
-                "Free Guy",
-                "The Greatest Showman"
             ]
         }
     }
